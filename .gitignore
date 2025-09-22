@@ -29,3 +29,6 @@ next-env.d.ts
 # .gitignore
 /serviceAccountKey.json
 /scripts/serviceAccountKey.json
+.firebase/
+.firebaserc
+firebase.json

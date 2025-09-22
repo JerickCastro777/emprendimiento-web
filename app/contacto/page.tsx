@@ -293,14 +293,14 @@ export default function ContactoPage() {
               <CardContent className="space-y-2">
                 <div className="flex justify-between">
                   <span className="font-medium">Lunes a Viernes</span>
-                  <span className="text-gray-600">8:00 AM - 6:00 PM</span>
+                  <span className="text-gray-600">9:00 AM - 6:00 PM</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Sábados</span>
-                  <span className="text-gray-600">9:00 AM - 4:00 PM</span>
+                  <span className="text-gray-600">9:00 AM - 3:00 PM</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-medium">Domingos</span>
+                  <span className="font-medium">Domingos y Festivos</span>
                   <span className="text-gray-600">Cerrado</span>
                 </div>
                 <Separator className="my-3" />
@@ -343,41 +343,54 @@ export default function ContactoPage() {
           <CardContent>
             <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
               {socialLinks.map((social) => {
-                const IconComponent = iconMap[social.icon as keyof typeof iconMap] || MessageCircle;
-                return (
-                  <Card key={social.platform} className={`hover:shadow-lg transition-all duration-300 border-2 ${getSocialColor(social.color)}`}>
-                    <CardContent className="p-4 text-center">
-                      <div className="space-y-3">
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto ${
-                          social.color === "green" ? "bg-green-100" :
-                          social.color === "pink" ? "bg-pink-100" :
-                          social.color === "blue" ? "bg-blue-100" :
-                          social.color === "black" ? "bg-gray-100" :
-                          social.color === "red" ? "bg-red-100" : "bg-gray-100"
-                        }`}>
-                          <IconComponent className={`w-6 h-6 ${
-                            social.color === "green" ? "text-green-600" :
-                            social.color === "pink" ? "text-pink-600" :
-                            social.color === "blue" ? "text-blue-600" :
-                            social.color === "black" ? "text-gray-800" :
-                            social.color === "red" ? "text-red-600" : "text-gray-600"
-                          }`} />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold">{social.platform}</h3>
-                          <p className="text-xs text-gray-600">{social.followers}</p>
-                        </div>
-                        <Button asChild variant="outline" size="sm" className={`w-full ${getSocialColor(social.color)}`}>
-                          <a href={social.url} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="w-3 h-3 mr-1" />
-                            Seguir
-                          </a>
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
+  const IconComponent = iconMap[social.icon as keyof typeof iconMap] || MessageCircle;
+  const hasUrl = !!social.url;
+  return (
+    <Card key={social.platform} className={`hover:shadow-lg transition-all duration-300 border-2 ${getSocialColor(social.color)}`}>
+      <CardContent className="p-4 text-center">
+        <div className="space-y-3">
+          <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto ${
+            social.color === "green" ? "bg-green-100" :
+            social.color === "pink" ? "bg-pink-100" :
+            social.color === "blue" ? "bg-blue-100" :
+            social.color === "black" ? "bg-gray-100" :
+            social.color === "red" ? "bg-red-100" : "bg-gray-100"
+          }`}>
+            <IconComponent className={`w-6 h-6 ${
+              social.color === "green" ? "text-green-600" :
+              social.color === "pink" ? "text-pink-600" :
+              social.color === "blue" ? "text-blue-600" :
+              social.color === "black" ? "text-gray-800" :
+              social.color === "red" ? "text-red-600" : "text-gray-600"
+            }`} />
+          </div>
+          <div>
+            <h3 className="font-semibold">{social.platform}</h3>
+            {social.followers && <p className="text-xs text-gray-600">{social.followers}</p>}
+          </div>
+
+          {hasUrl ? (
+            <Button asChild variant="outline" size="sm" className={`w-full ${getSocialColor(social.color)}`}>
+              <a href={social.url} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="w-3 h-3 mr-1" />
+                Seguir
+              </a>
+            </Button>
+          ) : (
+            <button
+              type="button"
+              className="w-full border rounded-md py-2 text-sm font-medium bg-gray-100 text-gray-500 cursor-not-allowed"
+              aria-disabled="true"
+            >
+              Próximamente
+            </button>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+})}
+
             </div>
           </CardContent>
         </Card>
