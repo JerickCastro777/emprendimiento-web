@@ -13,7 +13,7 @@ type HeroCarouselProps = {
 };
 
 export default function HeroCarousel({
-  images = ["/classic-white-ceramic-mug.png", "/romantic-couple-matching-t-shirts.png", "/romantic-gift-kit-couple.png"],
+  images = ["/WhatsApp Image 2025-09-19 at 12.43.18.jpeg", "/WhatsApp Image 2025-09-19 at 13.03.08.jpeg", "/WhatsApp Image 2025-09-19 at 13.04.25.jpeg"],
   interval = 4500,
   showControls = true,
 }: HeroCarouselProps) {
@@ -99,9 +99,16 @@ export default function HeroCarousel({
       {/* contenido centrado */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
         <div className="max-w-4xl mx-auto text-center px-6 pointer-events-auto">
-          <div className="mx-auto w-28 h-28 relative mb-6">
-            <Image src="/logo.png" alt="Eternal Love" fill className="object-contain" priority />
-          </div>
+         <div className="mx-auto w-60  h-60 relative mb-6">
+  <Image
+    src="/logo.png"
+    alt="Eternal Love"
+    fill
+    className="object-contain"
+    priority
+  />
+</div>
+
 
           <h1 className="text-4xl sm:text-5xl md:text-5xl font-extrabold text-white drop-shadow-lg">
             Personaliza con{" "}

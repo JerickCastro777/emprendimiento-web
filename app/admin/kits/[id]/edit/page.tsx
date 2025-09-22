@@ -1,27 +1,26 @@
-"use client";
+// app/kits/[id]/page.tsx
+import KitClient from "./KitClient";
 
-import React from "react";
-import { useParams } from "next/navigation";
-import AdminLayout from "@/components/admin-layout";
-import KitEditForm from "@/components/admin/KitEditForm";
+/** Genera los params en build usando Realtime DB REST (NEXT_PUBLIC_FIREBASE_DATABASE_URL) */
+export async function generateStaticParams() {
+  const base = process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL;
+  if (!base) return [];
 
-export default function AdminKitEditPage() {
-  const params = useParams() as { id?: string } | null;
-  const id = params?.id ?? null;
-
-  if (!id) {
-    return (
-      <AdminLayout>
-        <div className="p-8">ID de kit inválido.</div>
-      </AdminLayout>
-    );
+  try {
+    const res = await fetch(`${base}/kits.json`);
+    if (!res.ok) {
+      console.warn("generateStaticParams kits: fetch no OK", res.status);
+      return [];
+    }
+    const data = await res.json();
+    if (!data) return [];
+    return Object.keys(data).map((id) => ({ id }));
+  } catch (err) {
+    console.error("generateStaticParams kits error:", err);
+    return [];
   }
+}
 
-  return (
-    <AdminLayout>
-      <div className="py-8">
-        <KitEditForm kitId={id} />
-      </div>
-    </AdminLayout>
-  );
+export default function KitPage({ params }: { params: { id: string } }) {
+  return <KitClient kitId={params.id} />;
 }

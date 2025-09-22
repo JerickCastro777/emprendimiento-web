@@ -20,50 +20,45 @@ export interface SocialLink {
 export const socialLinks: SocialLink[] = [
   {
     platform: "WhatsApp",
-    url: "https://wa.me/573001234567?text=Hola%20Eternal%20Love,%20me%20interesa%20conocer%20más%20sobre%20sus%20productos%20personalizados",
+    url: "https://wa.me/573337172063?text=Hola%20Eternal%20Love",
     icon: "message-circle",
-    color: "green",
-    followers: "Contacto directo",
+    color: "green"
   },
   {
     platform: "Instagram",
-    url: "https://instagram.com/eternallove_personalizados",
+    url: "https://www.instagram.com/eternal.love.bog",
     icon: "instagram",
-    color: "pink",
-    followers: "2.5K seguidores",
+    color: "pink"
   },
   {
     platform: "Facebook",
-    url: "https://facebook.com/eternallove.personalizados",
+    url: "",
     icon: "facebook",
-    color: "blue",
-    followers: "1.8K seguidores",
+    color: "blue"
   },
   {
     platform: "TikTok",
-    url: "https://tiktok.com/@eternallove_co",
+    url: "",
     icon: "video",
-    color: "black",
-    followers: "950 seguidores",
+    color: "black"
   },
   {
     platform: "YouTube",
-    url: "https://youtube.com/@EternalLovePersonalizados",
+    url: "",
     icon: "youtube",
-    color: "red",
-    followers: "320 suscriptores",
+    color: "red"
   },
 ]
 
 export const contactInfo = {
-  phone: "+57 300 123 4567",
-  whatsapp: "+57 300 123 4567",
-  email: "hola@eternallove.co",
-  address: "Calle 123 #45-67, Bogotá, Colombia",
+  phone: "+57 333 717 2063",
+  whatsapp: "+57 333 717 2063",
+  email: "eternal.lovebog@gmail.com",
+  address: "Avenida calle 72# 57 B -43 (Local Interrapidismo), Bogotá, Colombia",
   hours: {
-    weekdays: "Lunes a Viernes: 8:00 AM - 6:00 PM",
-    saturday: "Sábados: 9:00 AM - 4:00 PM",
-    sunday: "Domingos: Cerrado",
+    weekdays: "Lunes a Viernes: 9:00 AM - 6:00 PM",
+    saturday: "Sábados: 9:00 AM - 3:00 PM",
+    sunday: "Domingos y Festivos: Cerrado",
   },
 }
 
