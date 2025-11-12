@@ -1,17 +1,14 @@
-// app/kits/[id]/page.tsx
-import KitClient from "./KitClient";
+// app/admin/kits/[id]/edit/page.tsx
+import React from "react";
+import AdminKitEditClient from "./AdminKitEditClient"; // <-- componente del admin correct
+import AdminLayout from "@/components/admin-layout";
 
-/** Genera los params en build usando Realtime DB REST (NEXT_PUBLIC_FIREBASE_DATABASE_URL) */
 export async function generateStaticParams() {
   const base = process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL;
   if (!base) return [];
-
   try {
-    const res = await fetch(`${base}/kits.json`);
-    if (!res.ok) {
-      console.warn("generateStaticParams kits: fetch no OK", res.status);
-      return [];
-    }
+    const res = await fetch(`${base}/kits.json`, { cache: "no-store" });
+    if (!res.ok) return [];
     const data = await res.json();
     if (!data) return [];
     return Object.keys(data).map((id) => ({ id }));
@@ -21,6 +18,19 @@ export async function generateStaticParams() {
   }
 }
 
-export default function KitPage({ params }: { params: { id: string } }) {
-  return <KitClient kitId={params.id} />;
+/** Página server: await params (Next v15+ passes params as Promise) */
+export default async function KitPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  // Pasamos el id al cliente admin que contiene el formulario de edición
+  return (
+    <AdminLayout>
+      <div className="py-6">
+        <AdminKitEditClient kitId={id} />
+      </div>
+    </AdminLayout>
+  );
 }

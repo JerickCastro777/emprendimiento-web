@@ -1,5 +1,4 @@
 // app/catalogo/[id]/page.tsx
-import AdminLayout from "@/components/admin-layout";// tu layout (ajusta nombre si es distinto)
 import ProductDetailClient from "./ProductDetailClient";
 
 /** Genera los params en build para output: "export" */
@@ -19,12 +18,12 @@ export async function generateStaticParams() {
   }
 }
 
-/** Página server: envuelve el cliente con tu layout (AdminLayout) */
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
-  const id = params.id;
-  return (
-    <AdminLayout>
-      <ProductDetailClient itemId={id} />
-    </AdminLayout>
-  );
+/** Página server: params viene como Promise, por eso hacemos await */
+export default async function ProductDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  return <ProductDetailClient itemId={id} />;
 }

@@ -2,56 +2,82 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import AdminLayout from "@/components/admin-layout";
 import ProductForm from "@/components/admin/ProductForm";
 import { fetchProductById, Product } from "@/lib/products";
 import { useRouter } from "next/navigation";
 
-export default function EditProductPage() {
+type Props = {
+  id?: string;
+};
+
+export default function EditProductClient({ id }: Props) {
   const router = useRouter();
-
-  // obtenemos id de la URL (aquí usamos el fallback simple)
-  const params = (typeof window !== "undefined" ? window.location.pathname.split("/") : []);
-  const id = params[params.length - 2] || "";
-
   const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
-    (async () => {
-      if (!id) return setLoading(false);
+    async function load() {
+      setLoading(true);
+      setError(null);
+      if (!id) {
+        setError("ID de producto no proporcionado.");
+        setProduct(null);
+        setLoading(false);
+        return;
+      }
       try {
         const p = await fetchProductById(id);
         if (!mounted) return;
-        setProduct(p);
+        setProduct(p ?? null);
       } catch (err) {
-        console.error("fetch product error", err);
+        console.error("Error fetching product:", err);
+        if (!mounted) return;
+        setError("No se pudo cargar el producto.");
+        setProduct(null);
       } finally {
         if (mounted) setLoading(false);
       }
-    })();
-    return () => { mounted = false; };
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
   }, [id]);
 
   async function handleSaved(savedId?: string) {
-    // redirigir al listado (o a la edición del mismo producto)
+    // redirige a la lista de productos o al detalle según prefieras
     router.push("/admin/productos");
   }
 
-  if (!id) {
+  if (loading) {
     return (
-      <AdminLayout>
-        <div className="p-6">ID del producto no encontrado en la URL.</div>
-      </AdminLayout>
+      <div className="p-6">
+        <div>Cargando producto…</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="text-red-600">Error: {error}</div>
+        <div className="mt-4">
+          <button
+            className="px-4 py-2 bg-gray-200 rounded"
+            onClick={() => router.push("/admin/productos")}
+          >
+            Volver a productos
+          </button>
+        </div>
+      </div>
     );
   }
 
   return (
-    <AdminLayout>
-      <div className="py-6">
-        {loading ? <div>Cargando...</div> : <ProductForm product={product} onSaved={handleSaved} />}
-      </div>
-    </AdminLayout>
+    <div className="py-6">
+      <ProductForm product={product ?? undefined} onSaved={handleSaved} />
+    </div>
   );
 }

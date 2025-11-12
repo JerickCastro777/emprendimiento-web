@@ -1,38 +1,32 @@
 // app/admin/productos/[id]/edit/page.tsx
-import React from "react"; // ruta relativa desde este archivo hasta components/ui
-import AdminLayout from "@/components/admin-layout";
+import React from "react";
 import EditProductClient from "./edit";
 
 /**
  * Genera los params en build para `output: "export"`.
  * Intenta leer la lista de productos desde la Realtime DB REST en NEXT_PUBLIC_FIREBASE_DATABASE_URL.
  * Si no hay URL o la lectura falla, devuelve vacío para evitar romper el build.
- *
- * Si tu DB requiere auth, usa la variante temporal (comentada abajo).
  */
 export async function generateStaticParams() {
   const base = process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL;
-  if (!base) {
-    // No hay URL configurada -> devolvemos vacío
-    return [];
-  }
+  if (!base) return [];
 
   try {
-    const res = await fetch(`${base}/productos.json`);
-    if (!res.ok) {
-      console.warn("generateStaticParams: fetch productos.json no OK", res.status);
-      return [];
+    // intenta leer /products.json (ajusta la ruta si tu recurso es distinto)
+    const res = await fetch(`${base}/products.json`, { cache: "no-store" });
+    if (!res.ok) return [];
+    const body = await res.json();
+    // body suele ser un objeto con keys -> products, ajusta según tu estructura
+    if (!body) return [];
+    // si body es objeto: extrae ids
+    if (typeof body === "object") {
+      return Object.keys(body).map((id) => ({ id }));
     }
-    const data = await res.json();
-    if (!data) return [];
-    return Object.keys(data).map((id) => ({ id }));
+    return [];
   } catch (err) {
-    console.error("generateStaticParams productos error:", err);
+    // si falla, devolvemos vacío para no romper el build
     return [];
   }
-
-  // ----- Variante temporal (descomenta si tu DB no es accesible en build) -----
-  // return [{ id: "demo-1" }, { id: "demo-2" }];
 }
 
 type Props = {
@@ -42,11 +36,11 @@ type Props = {
 
 export default async function EditProductPage({ params }: Props) {
   const { id } = await params;
+
+  // Nota: no envolvemos con AdminLayout -- app/admin/layout.tsx aplica el layout automáticamente
   return (
-    <AdminLayout>
-      <div className="py-8">
-        <EditProductClient id={id} />
-      </div>
-    </AdminLayout>
+    <div className="py-8">
+      <EditProductClient id={id} />
+    </div>
   );
 }

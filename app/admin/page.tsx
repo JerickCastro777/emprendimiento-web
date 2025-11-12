@@ -71,8 +71,6 @@ export default function AdminDashboard() {
   return (
     <AdminLayout>
       <div>
-        
-
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading ? (
             <div className="col-span-full text-center py-12">Cargando productos...</div>
