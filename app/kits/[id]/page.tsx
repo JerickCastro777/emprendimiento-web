@@ -103,27 +103,42 @@ export default async function KitDetail({ params }: Props) {
                   {kit.products && kit.products.length ? (
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {kit.products.map((p) => (
-                        <li key={p.id} className="flex items-center gap-4 p-3 border rounded hover:shadow-sm transition">
-                          <div className="w-16 h-16 rounded overflow-hidden bg-gray-100 flex-shrink-0">
-                            <img
-                              src={(p.images && p.images[0]) || "/placeholder.svg"}
-                              alt={p.name}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
+<li
+  key={p.id}
+  className="flex items-center gap-4 p-3 border rounded hover:shadow-sm transition"
+>
+  <div className="w-16 h-16 rounded overflow-hidden bg-gray-100 flex-shrink-0">
+    <img
+      src={(p.images && p.images[0]) || "/placeholder.svg"}
+      alt={p.name}
+      className="w-full h-full object-cover"
+    />
+  </div>
 
-                          <div className="flex-1">
-                            <div className="font-medium text-gray-800">{p.name}</div>
-                            <div className="text-xs text-gray-500 mt-1 truncate">{p.description ?? ""}</div>
-                          </div>
+  {/* important: min-w-0 permite que el flex-1 en espacios reducidos se encoja correctamente */}
+  <div className="flex-1 min-w-0">
+    <div className="font-medium text-gray-800">{p.name}</div>
 
-                          <div className="text-right w-28">
-                            <div className="text-sm text-gray-700">{formatPrice(p.basePrice)}</div>
-                            {typeof p.stock !== "undefined" && (
-                              <div className="text-xs text-gray-400 mt-1">Stock: {p.stock}</div>
-                            )}
-                          </div>
-                        </li>
+    {/* 
+      Preferible: line-clamp-2 (2 líneas). Si no tienes el plugin, al menos conservar truncate + min-w-0.
+      Uso break-words + overflow-hidden para evitar desbordes con cadenas largas sin espacios.
+    */}
+    <div className="text-xs text-gray-500 mt-1 overflow-hidden break-words">
+      {/* Si tienes plugin line-clamp: usa "line-clamp-2" además */}
+      <div className="line-clamp-2">
+        {p.description ?? ""}
+      </div>
+    </div>
+  </div>
+
+  <div className="text-right w-28 flex-shrink-0">
+    <div className="text-sm text-gray-700">{formatPrice(p.basePrice)}</div>
+    {typeof p.stock !== "undefined" && (
+      <div className="text-xs text-gray-400 mt-1">Stock: {p.stock}</div>
+    )}
+  </div>
+</li>
+
                       ))}
                     </ul>
                   ) : (
